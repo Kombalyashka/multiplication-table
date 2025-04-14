@@ -4,7 +4,6 @@
     <style>
         /* Общие стили для таблицы */
         table {
-            width: 80%;
             border-collapse: collapse;
             margin: 20px auto;
         }
@@ -31,39 +30,107 @@
         /* Подсветка при наведении */
         tr:hover {
             background-color: rgb(239, 138, 229);
-
+        }
+        
+        /* Стили для формы ввода */
+        .input-container {
+            text-align: center;
+            margin: 20px;
+        }
+        
+        input, button {
+            padding: 8px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: navy;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        button:hover {
+            background-color: #001f3f;
         }
     </style>
 </head>
 <body>
-
     <img src="600001112771b0.webp">
     <h1 style="text-align: center; color: #de88eb;">Таблица умножения</h1>
     
-    <script>
-
-
-let table = document.createElement("table");
-
-document.body.append(table);
-
-for (let i = 1; i < 10; i++) {
-    if ( i == 1) {   
-        let tr = document.createElement("tr");
-        table.appendChild(tr);
-    }
-  let tr = document.createElement("tr");
-  table.appendChild(tr);
-  
-  for (let j = 1; j < 10; j++) {
-    let td = document.createElement("td");
+    <div class="input-container">
+        <label for="tableSize">Размер таблицы:</label>
+        <input type="number" id="tableSize" min="1" max="20" value="10">
+        <button onclick="generateTable()">Создать таблицу</button>
+    </div>
     
-    tr.appendChild(td);
-    td.innerText = i * j;
-  }
-}
-
+    <div id="tableContainer"></div>
+    
+    <script>
+        function generateTable() {
+            // Получаем значение из input
+            const size = parseInt(document.getElementById("tableSize").value);
+            
+            // Проверяем, что введено корректное число
+            if (isNaN(size) || size < 1) {
+                alert("Пожалуйста, введите положительное число");
+                return;
+            }
+            
+            // Ограничиваем максимальный размер для производительности
+            if (size > 20) {
+                alert("Максимальный размер таблицы - 20");
+                return;
+            }
+            
+            // Очищаем предыдущую таблицу
+            const container = document.getElementById("tableContainer");
+            container.innerHTML = "";
+            
+            // Создаем новую таблицу
+            const table = document.createElement("table");
+            container.appendChild(table);
+            
+            // Создаем заголовок таблицы
+            const headerRow = document.createElement("tr");
+            table.appendChild(headerRow);
+            
+            // Пустая ячейка в левом верхнем углу
+            const emptyHeader = document.createElement("th");
+            headerRow.appendChild(emptyHeader);
+            
+            // Заголовки столбцов
+            for (let j = 1; j <= size; j++) {
+                const th = document.createElement("th");
+                th.innerText = j;
+                headerRow.appendChild(th);
+            }
+            
+            // Создаем строки таблицы
+            for (let i = 1; i <= size; i++) {
+                const tr = document.createElement("tr");
+                table.appendChild(tr);
+                
+                // Заголовок строки
+                const rowHeader = document.createElement("th");
+                rowHeader.innerText = i;
+                tr.appendChild(rowHeader);
+                
+                // Ячейки с результатами умножения
+                for (let j = 1; j <= size; j++) {
+                    const td = document.createElement("td");
+                    td.innerText = i * j;
+                    tr.appendChild(td);
+                }
+            }
+        }
+        
+        // Генерируем таблицу при загрузке страницы
+        window.onload = function() {
+            generateTable();
+        };
     </script>
 </body>
 </html>
-
